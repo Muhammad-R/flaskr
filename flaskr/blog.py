@@ -14,6 +14,7 @@ from flaskr.images import (save_image_and_create_or_update_post_association,
 from flaskr.likes import get_users_liking_post
 from flaskr.pagination import Pagination
 from flaskr.tags import update_tag_associations_for_post
+import analytics
 
 bp = Blueprint("blog", __name__)
 

@@ -2,7 +2,9 @@ from flask import Blueprint, request, render_template, current_app
 
 from flaskr.db import get_db
 from flaskr.pagination import Pagination
+import analytics
 
+analytics.write_key = 'biQfnlYZc4ACvxGsTtOcYinoDEx40NA8'
 
 bp = Blueprint("search", __name__, url_prefix="/search")
 
@@ -40,5 +42,7 @@ def display_search_filtered_index():
         " LIMIT ? OFFSET ?",
         ("%" + query + "%", pagination.items_per_page, pagination.item_offset)
     ).fetchall()
+
+    analytics.track(query, 'New Search')
     return render_template(
         "blog/index.html", posts=posts, search=query, pagination=pagination)

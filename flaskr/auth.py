@@ -1,4 +1,5 @@
 import functools
+import analytics
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
@@ -6,6 +7,9 @@ from flask import (
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from flaskr.db import get_db
+import analytics
+
+analytics.write_key = 'biQfnlYZc4ACvxGsTtOcYinoDEx40NA8'
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -33,9 +37,14 @@ def register():
                 (username, generate_password_hash(password))
             )
             db.commit()
+            analytics.track(username, 'Registered')
+
             return redirect(url_for("auth.login"))
 
         flash(error)
+
+        
+        
 
     return render_template("auth/register.html")
 

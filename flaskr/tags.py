@@ -3,6 +3,9 @@ from flask import Blueprint, render_template, current_app, request
 from flaskr.db import get_db
 from flaskr.pagination import Pagination
 
+import analytics
+
+analytics.write_key = 'biQfnlYZc4ACvxGsTtOcYinoDEx40NA8'
 
 bp = Blueprint("tags", __name__, url_prefix="/tags")
 
@@ -181,5 +184,7 @@ def display_tagged_posts(tag):
         " LIMIT ? OFFSET ?",
         (tag, pagination.items_per_page, pagination.item_offset)
     ).fetchall()
+
+    analytics.track(tag, f'Tag {tag} searched!')
     return render_template(
         "blog/index.html", posts=posts, tag=tag, pagination=pagination)
